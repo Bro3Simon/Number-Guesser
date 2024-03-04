@@ -1,0 +1,3 @@
+# The git command throws an error if there are local uncommitted changes thus preventing a push. 
+# The test command runs all tests not in watch mode and prevents a push if any test fails.
+npx lint-staged
