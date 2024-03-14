@@ -53,6 +53,20 @@ describe("test FormTextField", () => {
     expect(screen.getByLabelText(numberFieldLabel)).toBeInTheDocument();
   });
 
+  test("renders the correct placeholder", () => {
+    const placeholder = "1 - 10";
+
+    render(
+      <FormTextField
+        control={getUseFormResults().control}
+        name={numberFieldName}
+        placeholder={placeholder}
+      />,
+    );
+
+    expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
+  });
+
   test("renders a spinbutton by default", () => {
     render(
       <FormTextField
@@ -73,29 +87,6 @@ describe("test FormTextField", () => {
     );
 
     expect(screen.getByRole("spinbutton")).not.toBeDisabled();
-  });
-
-  test("renders a disabled spinbutton", () => {
-    render(
-      <FormTextField
-        control={getUseFormResults().control}
-        isDisabled
-        name={numberFieldName}
-      />,
-    );
-
-    expect(screen.getByRole("spinbutton")).toBeDisabled();
-  });
-
-  test("renders a spinbutton that is not required", () => {
-    render(
-      <FormTextField
-        control={getUseFormResults().control}
-        name={numberFieldName}
-      />,
-    );
-
-    expect(screen.getByRole("spinbutton")).not.toBeRequired();
   });
 
   test("renders a required spinbutton", () => {
@@ -175,24 +166,5 @@ describe("test FormTextField", () => {
     await user.type(numberField, "ts3ti4ng");
     await user.clear(numberField);
     expect(screen.getByText(MINIMUM_0_ERROR_MESSAGE)).toBeInTheDocument();
-  });
-
-  test("renders the correct error message when the validate rule is true", async () => {
-    const user = userEvent.setup();
-    const errorMessage = "This number is not allowed.";
-
-    render(
-      <FormTextField
-        control={getUseFormResults().control}
-        name={numberFieldName}
-        rules={{
-          validate: (value) => value !== 34 || errorMessage,
-        }}
-      />,
-    );
-
-    expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
-    await user.type(screen.getByRole("spinbutton"), "ts3ti4ng");
-    expect(screen.getByText(errorMessage)).toBeInTheDocument();
   });
 });

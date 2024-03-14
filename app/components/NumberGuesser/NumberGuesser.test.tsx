@@ -3,17 +3,19 @@ import { userEvent } from "@testing-library/user-event";
 
 import {
   CORRECT_GUESS_MESSAGE,
-  GUESS_NUMBER_INPUT_NAME,
   NEXT_BUTTON_TEXT,
   NumberGuesser,
+  PICK_A_NUMBER_INPUT_NAME,
   PICK_A_NUMBER_INSTRUCTIONS,
+  PICK_A_NUMBER_RANGE,
   PLAY_AGAIN_BUTTON_TEXT,
   PLAY_AGAIN_OFFER,
   RESULT_MESSAGE,
-  SECRET_NUMBER_INPUT_NAME,
   SUBMIT_BUTTON_TEXT,
+  SUBMIT_GUESS_INPUT_NAME,
   SUBMIT_GUESS_INSTRUCTIONS,
   SUBMIT_GUESS_MESSAGE,
+  SUBMIT_GUESS_RANGE,
   TRIED_NUMBERS_MESSAGE,
   TRY_AGAIN_MESSAGE,
   WELCOME_MESSAGE,
@@ -40,19 +42,27 @@ describe("test NumberGuesser", () => {
       expect(screen.getByText(PICK_A_NUMBER_INSTRUCTIONS)).toBeInTheDocument();
     });
 
-    test("renders the secret number input", () => {
+    test("renders the pick a number input", () => {
       render(<NumberGuesser />);
 
       expect(screen.getByRole("spinbutton")).toHaveAttribute(
         "name",
-        SECRET_NUMBER_INPUT_NAME,
+        PICK_A_NUMBER_INPUT_NAME,
       );
     });
 
-    test("the secret number input is required", () => {
+    test("the pick a number input is required", () => {
       render(<NumberGuesser />);
 
       expect(screen.getByRole("spinbutton")).toHaveAttribute("required");
+    });
+
+    test("the pick a number input has the correct placeholder", () => {
+      render(<NumberGuesser />);
+
+      expect(
+        screen.getByPlaceholderText(PICK_A_NUMBER_RANGE),
+      ).toBeInTheDocument();
     });
 
     test("renders the submit button", () => {
@@ -125,7 +135,7 @@ describe("test NumberGuesser", () => {
       expect(screen.getByText(SUBMIT_GUESS_INSTRUCTIONS)).toBeInTheDocument();
     });
 
-    test("renders the guess number input", async () => {
+    test("renders the submit guess input", async () => {
       const user = userEvent.setup();
 
       render(<NumberGuesser />);
@@ -136,11 +146,11 @@ describe("test NumberGuesser", () => {
 
       expect(screen.getByRole("spinbutton")).toHaveAttribute(
         "name",
-        GUESS_NUMBER_INPUT_NAME,
+        SUBMIT_GUESS_INPUT_NAME,
       );
     });
 
-    test("the guess number input is required", async () => {
+    test("the submit guess input is required", async () => {
       const user = userEvent.setup();
 
       render(<NumberGuesser />);
@@ -150,6 +160,20 @@ describe("test NumberGuesser", () => {
       await user.click(screen.getByRole("button"));
 
       expect(screen.getByRole("spinbutton")).toHaveAttribute("required");
+    });
+
+    test("the submit guess input has the correct placeholder", async () => {
+      const user = userEvent.setup();
+
+      render(<NumberGuesser />);
+
+      await user.type(screen.getByRole("spinbutton"), "234");
+      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole("button"));
+
+      expect(
+        screen.getByPlaceholderText(SUBMIT_GUESS_RANGE),
+      ).toBeInTheDocument();
     });
 
     test("renders the submit button", async () => {
@@ -206,16 +230,16 @@ describe("test NumberGuesser", () => {
       expect(screen.getByText(SUBMIT_GUESS_INSTRUCTIONS)).toBeInTheDocument();
     });
 
-    test("renders the guess number input", () => {
+    test("renders the submit guess input", () => {
       render(<NumberGuesser />);
 
       expect(screen.getByRole("spinbutton")).toHaveAttribute(
         "name",
-        GUESS_NUMBER_INPUT_NAME,
+        SUBMIT_GUESS_INPUT_NAME,
       );
     });
 
-    test("the guess number input is required", () => {
+    test("the submit guess input is required", () => {
       render(<NumberGuesser />);
 
       expect(screen.getByRole("spinbutton")).toHaveAttribute("required");

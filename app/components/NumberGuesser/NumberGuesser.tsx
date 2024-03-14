@@ -1,7 +1,5 @@
 "use client";
 
-// TODO: Review accessibility guidelines for this rule.
-/* eslint-disable jsx-a11y/no-autofocus */
 import {
   Box,
   Button,
@@ -17,8 +15,9 @@ import { REQUIRED_RULE, arrayToCommaSeparatedString } from "app/utilities";
 
 export const WELCOME_MESSAGE =
   "Let's play a game! First, I will try to guess your number.";
-export const PICK_A_NUMBER_INSTRUCTIONS = "Pick a number between 1 - 1,000";
-export const SECRET_NUMBER_INPUT_NAME = "secretNumber";
+export const PICK_A_NUMBER_RANGE = "1 - 1,000";
+export const PICK_A_NUMBER_INSTRUCTIONS = `Pick a number between ${PICK_A_NUMBER_RANGE}`;
+export const PICK_A_NUMBER_INPUT_NAME = "secretNumber";
 export const SUBMIT_BUTTON_TEXT = "Submit";
 export const RESULT_MESSAGE = [
   "Was your number",
@@ -29,9 +28,9 @@ export const RESULT_MESSAGE = [
 export const NEXT_BUTTON_TEXT = "NEXT";
 export const SUBMIT_GUESS_MESSAGE =
   "Now it's your turn! Try to guess my number.";
-export const SUBMIT_GUESS_INSTRUCTIONS =
-  "I am thinking of a number between 1 - 10.";
-export const GUESS_NUMBER_INPUT_NAME = "guess";
+export const SUBMIT_GUESS_RANGE = "1 - 10";
+export const SUBMIT_GUESS_INSTRUCTIONS = `I am thinking of a number between ${SUBMIT_GUESS_RANGE}.`;
+export const SUBMIT_GUESS_INPUT_NAME = "guess";
 export const TRY_AGAIN_MESSAGE = "Sorry, that is incorrect, try again!";
 export const TRIED_NUMBERS_MESSAGE = "Numbers you have tried:";
 export const CORRECT_GUESS_MESSAGE = "That's correct!";
@@ -85,7 +84,8 @@ export function NumberGuesser() {
                 <FormTextField
                   control={control}
                   label="Secret Number"
-                  name={SECRET_NUMBER_INPUT_NAME}
+                  name={PICK_A_NUMBER_INPUT_NAME}
+                  placeholder={PICK_A_NUMBER_RANGE}
                   rules={{
                     max: {
                       message: "Must be less than 1,000",
@@ -141,10 +141,10 @@ export function NumberGuesser() {
 
               <Box mt={2}>
                 <FormTextField
-                  autoFocus
                   control={control}
                   label="Secret Number"
-                  name={GUESS_NUMBER_INPUT_NAME}
+                  name={SUBMIT_GUESS_INPUT_NAME}
+                  placeholder={SUBMIT_GUESS_RANGE}
                   rules={{
                     validate: (value) =>
                       !userGuesses.includes(value.toString()) ||
@@ -177,17 +177,13 @@ export function NumberGuesser() {
           ) : null}
 
           {state === "result" ? (
-            <Button autoFocus onClick={handleClickNext} variant="contained">
+            <Button onClick={handleClickNext} variant="contained">
               {NEXT_BUTTON_TEXT}
             </Button>
           ) : null}
 
           {state === "correctGuess" ? (
-            <Button
-              autoFocus
-              onClick={handleClickPlayAgain}
-              variant="contained"
-            >
+            <Button onClick={handleClickPlayAgain} variant="contained">
               {PLAY_AGAIN_BUTTON_TEXT}
             </Button>
           ) : null}

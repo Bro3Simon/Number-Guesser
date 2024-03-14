@@ -8,47 +8,24 @@ import {
   useController,
 } from "react-hook-form";
 
-type FormTextFieldOwnProps = {
-  isDisabled?: boolean;
-  isRequired?: boolean;
-  onChange?: () => void;
-};
-type FormTextFieldProps<T extends FieldValues> = Omit<
+type FormTextFieldProps<T extends FieldValues> = Pick<
   TextFieldProps,
-  | "disabled"
-  | "error"
-  | "fullWidth"
-  | "onBlur"
-  | "onChange"
-  | "required"
-  | "type"
-  | "value"
+  "helperText" | "label" | "placeholder"
 > &
-  Omit<UseControllerProps<T>, "disabled"> &
-  FormTextFieldOwnProps;
+  Omit<UseControllerProps<T>, "defaultValue" | "disabled" | "shouldUnregister">;
 
 export function FormTextField<T extends FieldValues>({
   control,
   // https://mui.com/material-ui/react-text-field/#helper-text
   helperText = " ",
-  isDisabled = false,
-  isRequired = false,
+  label,
   name,
-  onChange = undefined,
+  placeholder,
   rules,
-  ...rest
 }: FormTextFieldProps<T>) {
   const {
-    field: {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      disabled: isReactHookFormFieldDisabled,
-      onChange: reactHookFormOnChange,
-      ref,
-      value,
-      ...field
-    },
+    field: { onChange, ref, value },
     fieldState: { error },
-    formState: { isSubmitting },
   } = useController({
     control,
     name,
@@ -56,30 +33,26 @@ export function FormTextField<T extends FieldValues>({
   });
 
   function computeHtmlValue() {
-    value !== 0 ? value : "";
+    return value !== 0 ? value : "";
   }
 
   function handleOnChange({ target }: ChangeEvent<HTMLInputElement>) {
-    reactHookFormOnChange(
-      isNaN(target.valueAsNumber) ? 0 : target.valueAsNumber,
-    );
-
-    if (onChange) onChange();
+    onChange(isNaN(target.valueAsNumber) ? 0 : target.valueAsNumber);
   }
 
   return (
     <TextField
-      disabled={isDisabled || isSubmitting}
       error={!!error}
       fullWidth
       helperText={error?.message ?? helperText}
       inputRef={ref}
+      label={label}
+      name={name}
       onChange={handleOnChange}
-      required={isRequired || !!rules?.required}
+      placeholder={placeholder}
+      required={!!rules?.required}
       type="number"
       value={computeHtmlValue()}
-      {...field}
-      {...rest}
     />
   );
 }
